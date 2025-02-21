@@ -86,17 +86,6 @@ const ChatMessageArea = ({
     }
   };
 
-//   const handleTranslate = async () => {
-//     const sourceLang = languageCodeMap[detectedLang] || "en"; // Default to "en" if unknown
-//     const detectedLang = detectedLanguages[messageId] || "Unknown";
-//     if (sourceLang === targetLang) {{
-
-//         setMessages((prevMessages) => 
-//         prevMessages.map((msg, idx) => 
-//         idx === messageIndex ? {...msg, translationError: "same language detected"} : msg))
-//     }
-//   }
-// }
 
  const handleTranslate = async (messageId, text) => {
     setIsProcessing((prev) => ({ ...prev, [messageId]: "translating" }));
