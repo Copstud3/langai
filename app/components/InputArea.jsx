@@ -3,7 +3,7 @@ import {Send} from "lucide-react"
 
 const InputArea = ({inputText, handleSend, handleKeyPress, setInputText}) => {
   return (
-    <div className="flex gap-2 lg:px-[400px] px-3 pb-5 pt-4  bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="flex gap-2 lg:px-[400px] px-3 lg:pb-5 pt-4  bg-gradient-to-b from-gray-50 to-gray-100">
       <div className="flex items-center border rounded-lg w-full py-2 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
       <textarea
         value={inputText}
