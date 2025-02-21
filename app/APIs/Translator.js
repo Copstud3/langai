@@ -1,53 +1,45 @@
+// APIs/Translator.js
 const languageOptions = {
-  en: "English",
-  pt: "Portuguese",
-  es: "Spanish",
-  ru: "Russian",
-  tr: "Turkish",
-  fr: "French",
-};
-
-export const translateText = async (text, targetLang, sourceLang) => {
-  try {
-    // Check if the Chrome AI API is available
-    if (!("ai" in self && "translator" in self.ai)) {
-      throw new Error("Chrome AI API is not available in this browser");
+    en: "English",
+    pt: "Portuguese",
+    es: "Spanish",
+    ru: "Russian",
+    tr: "Turkish",
+    fr: "French",
+  };
+  
+  export const translateText = async (text, targetLang, sourceLang) => {
+    try {
+      if (!("ai" in self && "translator" in self.ai)) {
+        throw new Error("Chrome AI API is not available in this browser");
+      }
+  
+      const translatorCapabilities = await self.ai.translator.capabilities();
+      if (!translatorCapabilities.languagePairAvailable(sourceLang, targetLang)) {
+        throw new Error(`Language pair not supported: ${sourceLang} to ${targetLang}`);
+      }
+  
+      const translator = await self.ai.translator.create({
+        sourceLanguage: sourceLang,
+        targetLanguage: targetLang,
+        monitor(m) {
+          m.addEventListener("downloadprogress", (e) => {
+            console.log(`Downloaded ${e.loaded} of ${e.total} bytes.`);
+          });
+        },
+      });
+  
+      const result = await translator.translate(text);
+      if (!result) {
+        throw new Error("No translation result received");
+      }
+  
+      // Assume result is a string; adjust if API docs specify otherwise
+      return result;
+    } catch (error) {
+      console.error("Translation error:", error);
+      throw error; // Let ChatMessageArea handle display
     }
-
-    // Validate languages
-    const translatorCapabilities = await self.ai.translator.capabilities();
-    translatorCapabilities.languagePairAvailable(sourceLang, targetLang);
-
-    // Create translation model
-    const translator = await self.ai.translator.create({
-      sourceLanguage: sourceLang,
-      targetLanguage: targetLang,
-      monitor(m) {
-        m.addEventListener("downloadprogress", (e) => {
-          console.log(`Downloaded ${e.loaded} of ${e.total} bytes.`);
-        });
-      },
-    });
-
-    // Perform translation
-    const result = await translator.translate(text);
-
-    if (!result || !result.translation) {
-      throw new Error("No translation result received");
-    }
-
-    return result.translation;
-  } catch (error) {
-    console.error("Translation error:", error);
-
-    if (error instanceof DOMException && error.name === "NotSupportedError") {
-      throw new Error(
-        `Language pair not supported: ${sourceLang} to ${targetLang}`
-      );
-    }
-
-    throw error; // Let the component handle the error display
-  }
-};
-
-export const getLanguageOptions = () => languageOptions;
+  };
+  
+  export const getLanguageOptions = () => languageOptions;

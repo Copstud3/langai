@@ -86,13 +86,30 @@ const ChatMessageArea = ({
     }
   };
 
-  const handleTranslate = async (messageId, text) => {
+//   const handleTranslate = async () => {
+//     const sourceLang = languageCodeMap[detectedLang] || "en"; // Default to "en" if unknown
+//     const detectedLang = detectedLanguages[messageId] || "Unknown";
+//     if (sourceLang === targetLang) {{
+
+//         setMessages((prevMessages) => 
+//         prevMessages.map((msg, idx) => 
+//         idx === messageIndex ? {...msg, translationError: "same language detected"} : msg))
+//     }
+//   }
+// }
+
+ const handleTranslate = async (messageId, text) => {
     setIsProcessing((prev) => ({ ...prev, [messageId]: "translating" }));
     try {
-      // Map detected full language name to its code
       const detectedLang = detectedLanguages[messageId] || "Unknown";
-      const sourceLang = languageCodeMap[detectedLang] || "en"; // Default to "en" if unknown
-      const translation = await translateText(text, selectedLang, sourceLang);
+      const sourceLang = languageCodeMap[detectedLang] || "en";
+      const targetLang = selectedLang;
+
+      if (sourceLang === targetLang) {
+        throw new Error("Source and target languages are the same");
+      }
+
+      const translation = await translateText(text, targetLang, sourceLang);
       setMessages((prev) => [
         ...prev,
         {
@@ -100,7 +117,7 @@ const ChatMessageArea = ({
           text: translation,
           timestamp: new Date().toLocaleTimeString(),
           isTranslation: true,
-          targetLanguage: languageOptions[selectedLang],
+          targetLanguage: languageOptions[targetLang],
           replyingToId: messageId,
           replyingToText: text.length > 30 ? `${text.slice(0, 30)}...` : text
         }
