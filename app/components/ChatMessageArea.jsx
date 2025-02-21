@@ -125,7 +125,7 @@ const ChatMessageArea = ({
   };
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-b from-gray-50 to-gray-100 min-h-[calc(100vh-178px)] lg:px-[300px] space-y-6">
+    <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-b from-gray-50 to-gray-100 min-h-[calc(100vh-200px)] lg:min-h-[calc(100vh-178px)] lg:px-[300px] space-y-6">
       {messages.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full">
           <h1 className="text-3xl lg:text-6xl font-bold text-gray-600">

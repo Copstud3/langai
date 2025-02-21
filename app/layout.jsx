@@ -24,6 +24,11 @@ export default function RootLayout({ children }) {
         ) : (
           <meta name="error" content="Summarizer token missing" />
         )}
+        {languageDetectionToken ? (
+          <meta httpEquiv="origin-trial" content={languageDetectionToken} />
+        ) : (
+          <meta name="error" content="Language detection token missing" />
+        )}
       </head>
       <body
         className={`font-inter`}
